@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fetch Users from API</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .user {
+      background: #f0f0f0;
+      padding: 10px;
+      margin: 10px 0;
+      border-left: 4px solid #007BFF;
+    }
+  </style>
+</head>
+<body>
+  <h1>Users List</h1>
+  <div id="userList">Loading users...</div>
+
+  <script>
+    // Fetch data from API
+    fetch('https://jsonplaceholder.typicode.com/users')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then(data => {
+        const userList = document.getElementById('userList');
+        userList.innerHTML = ''; // Clear loading message
+
+        data.forEach(user => {
+          const userDiv = document.createElement('div');
+          userDiv.className = 'user';
+          userDiv.innerHTML = `
+            <strong>${user.name}</strong><br>
+            Email: ${user.email}<br>
+            Phone: ${user.phone}<br>
+            Website: <a href="http://${user.website}" target="_blank">${user.website}</a>
+          `;
+          userList.appendChild(userDiv);
+        });
+      })
+      .catch(error => {
+        document.getElementById('userList').innerHTML = 'Failed to load data.';
+        console.error('Error:', error);
+      });
+  </script>
+</body>
+</html>
